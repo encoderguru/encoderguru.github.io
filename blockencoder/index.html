@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Block Cipher Encoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.encode {
+    background: #2563eb;
+    color: white;
+}
+
+.encode:hover {
+    background: #1d4ed8;
+}
+
+.decode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.decode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    padding: 12px 0;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+select,
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+}
+
+.help {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<a class="header-link" href="https://encoderguru.github.io">
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>Block Cipher Encoder</h1>
+
+<p>
+Encrypt text using AES
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+<div class="editor-title">
+    Enter your text
+</div>
+
+<p class="description">
+    Type or paste the text you want to encrypt.
+</p>
+
+<textarea
+    id="input"
+    placeholder="Start typing..."
+></textarea>
+
+
+<div id="outputContainer">
+
+<div class="output-title">
+    Encoded output
+</div>
+
+<textarea
+    id="output"
+    readonly
+></textarea>
+
+</div>
+
+
+<div class="buttons">
+
+<button class="encode" onclick="encodeText()">
+    Encode
+</button>
+
+<button class="decode" onclick="openDecoder()">
+    Decode
+</button>
+
+<button class="clear" onclick="clearText()">
+    Clear
+</button>
+
+</div>
+
+
+<div class="customization">
+
+<div class="customization-title">
+    Customization
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Algorithm
+</div>
+
+<select id="algorithm">
+
+<option value="AES-128">
+    AES-128
+</option>
+
+<option value="AES-256">
+    AES-256
+</option>
+
+</select>
+
+<div class="help">
+    Select the AES key size.
+</div>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Mode
+</div>
+
+<select id="mode">
+
+<option value="CBC">
+    CBC
+</option>
+
+<option value="CTR">
+    CTR
+</option>
+
+</select>
+
+<div class="help">
+    CBC uses block padding. CTR turns AES into a stream-like cipher and does not require padding.
+</div>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Password
+</div>
+
+<input
+    type="password"
+    id="password"
+    placeholder="Enter a password"
+    autocomplete="off"
+>
+
+<div class="help">
+    The password is converted into an AES key using PBKDF2-SHA-256.
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+Help me! (helpers)
+*/
+
+const textEncoder =
+    new TextEncoder();
+
+
+function bytesToBase64(bytes) {
+
+    let binary = "";
+
+    const chunkSize = 0x8000;
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += chunkSize
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                Math.min(
+                    i + chunkSize,
+                    bytes.length
+                )
+            )
+        );
+    }
+
+    return btoa(binary);
+}
+
+
+/*
+key derivavvavtion
+*/
+
+async function deriveKey(
+    password,
+    salt,
+    algorithm
+) {
+
+    const passwordKey =
+        await crypto.subtle.importKey(
+            "raw",
+            textEncoder.encode(password),
+            "PBKDF2",
+            false,
+            ["deriveKey"]
+        );
+
+
+    const keyLength =
+        algorithm === "AES-128"
+            ? 128
+            : 256;
+
+
+    return crypto.subtle.deriveKey(
+
+        {
+            name: "PBKDF2",
+            salt: salt,
+            iterations: 100000,
+            hash: "SHA-256"
+        },
+
+        passwordKey,
+
+        {
+            name:
+                document.getElementById("mode").value === "CBC"
+                    ? "AES-CBC"
+                    : "AES-CTR",
+
+            length: keyLength
+        },
+
+        false,
+
+        ["encrypt", "decrypt"]
+    );
+}
+
+
+/*
+encode
+*/
+
+async function encodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!input) {
+        return;
+    }
+
+    if (!password) {
+
+        alert(
+            "Please enter a password."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const algorithm =
+            document.getElementById("algorithm").value;
+
+        const mode =
+            document.getElementById("mode").value;
+
+
+        /*
+salt and papper
+        */
+
+        const salt =
+            crypto.getRandomValues(
+                new Uint8Array(16)
+            );
+
+
+        /*
+        uhhh iv
+        */
+
+        const iv =
+            crypto.getRandomValues(
+                new Uint8Array(16)
+            );
+
+
+        const key =
+            await deriveKey(
+                password,
+                salt,
+                algorithm
+            );
+
+
+        const plaintext =
+            textEncoder.encode(input);
+
+
+        let ciphertext;
+
+
+        if (mode === "CBC") {
+
+            ciphertext =
+                await crypto.subtle.encrypt(
+
+                    {
+                        name: "AES-CBC",
+                        iv: iv
+                    },
+
+                    key,
+
+                    plaintext
+                );
+
+        } else {
+
+            ciphertext =
+                await crypto.subtle.encrypt(
+
+                    {
+                        name: "AES-CTR",
+                        counter: iv,
+                        length: 64
+                    },
+
+                    key,
+
+                    plaintext
+                );
+        }
+
+
+        const result =
+            algorithm.replace("-", "") +
+            "-" +
+            mode +
+            ":" +
+            bytesToBase64(salt) +
+            "." +
+            bytesToBase64(iv) +
+            "." +
+            bytesToBase64(
+                new Uint8Array(ciphertext)
+            );
+
+
+        document.getElementById("output").value =
+            result;
+
+        document.getElementById("outputContainer")
+            .style.display = "block";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Encryption failed."
+        );
+    }
+}
+
+
+/*
+decoder
+*/
+
+function openDecoder() {
+
+    const output =
+        document.getElementById("output").value;
+
+    if (output) {
+
+        sessionStorage.setItem(
+            "blockData",
+            output
+        );
+    }
+
+
+    sessionStorage.setItem(
+        "blockAlgorithm",
+        document.getElementById("algorithm").value
+    );
+
+
+    sessionStorage.setItem(
+        "blockMode",
+        document.getElementById("mode").value
+    );
+
+
+    window.location.href =
+        "/blockdecoder";
+}
+
+
+/*
+Clear!
+*/
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
