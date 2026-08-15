@@ -619,15 +619,25 @@ function decodeUnicode(sequence, morse) {
 
     for (const piece of pieces) {
 
-        if (!reverse[piece]) {
+        if (!(piece in reverse)) {
             return null;
         }
 
-        hex += reverse[piece];
+        const character = reverse[piece];
+
+        // Unicode code points only use hexadecimal digits
+        if (!/^[0-9A-F]$/i.test(character)) {
+            return null;
+        }
+
+        hex += character;
     }
 
-    // Unicode code points are hexadecimal
-    if (!/^[0-9A-F]+$/i.test(hex)) {
+    // Unicode code points are 1–6 hexadecimal digits
+    if (
+        hex.length < 1 ||
+        hex.length > 6
+    ) {
         return null;
     }
 
@@ -646,17 +656,10 @@ function decodeUnicode(sequence, morse) {
 
     return String.fromCodePoint(codePoint);
 }
-
-
 /*
-speperpatir detection
+finally decoding part
 */
-
 function splitWords(input) {
-
-    /*
-    Slash separator
-*/
 
     if (/(^|\s)\/(\s|$)/.test(input)) {
 
@@ -667,19 +670,13 @@ function splitWords(input) {
 
 
     /*
-    Three-or-more-space separator
-    */
+     * Three or more spaces also separate words.
+     */
 
     return input
         .trim()
         .split(/\s{3,}/);
 }
-
-
-/*
-finally decoding part
-*/
-
 function decodeText() {
 
     const input =
@@ -721,67 +718,98 @@ function decodeText() {
                 symbols[i];
 
 
-            /*
-            Unicode marker.
-
-            The encoder outputs:
-
-            & [Morse for U] [Morse for hex]...
-            */
-
-            if (
-                symbol === "&" &&
-                foreign === "enabled"
-            ) {
-
-                let sequence = [];
-                let found = false;
 
 
-                for (
-                    let j = i + 1;
-                    j < symbols.length;
-                    j++
-                ) {
+if (
+    symbol === "&" &&
+    foreign === "enabled"
+) {
 
-                    sequence.push(
-                        symbols[j]
-                    );
+    let sequence = [];
+    let endIndex = i;
 
 
-                    const candidate =
-                        decodeUnicode(
-                            sequence.join(" "),
-                            morse
-                        );
+    for (
+        let j = i + 1;
+        j < symbols.length && sequence.length < 6;
+        j++
+    ) {
+
+        const nextSymbol = symbols[j];
 
 
-                    if (candidate !== null) {
-
-                        decoded += candidate;
-
-                        i = j;
-
-                        found = true;
-
-                        break;
-                    }
-                }
+        /*
+         * A slash explicitly ends the Unicode sequence.
+         */
+        if (nextSymbol === "/") {
+            endIndex = j;
+            break;
+        }
 
 
-                if (!found) {
-
-                    alert(
-                        "Invalid Unicode Morse sequence."
-                    );
-
-                    return;
-                }
-
-                continue;
-            }
+        const character = reverse[nextSymbol];
 
 
+
+        if (
+            !character ||
+            !/^[0-9A-F]$/i.test(character)
+        ) {
+            break;
+        }
+
+
+        sequence.push(nextSymbol);
+
+        endIndex = j;
+    }
+
+
+    
+    if (sequence.length === 0) {
+
+        alert(
+            "Invalid Unicode Morse sequence."
+        );
+
+        return;
+    }
+
+
+    const candidate =
+        decodeUnicode(
+            sequence.join(" "),
+            morse
+        );
+
+
+    if (candidate === null) {
+
+        alert(
+            "Invalid Unicode Morse sequence."
+        );
+
+        return;
+    }
+
+
+    decoded += candidate;
+
+
+
+    i = endIndex;
+
+
+
+    if (
+        symbols[i + 1] === "/"
+    ) {
+        i++;
+    }
+
+
+    continue;
+}
             /*
             Normal Morse character.
             */
