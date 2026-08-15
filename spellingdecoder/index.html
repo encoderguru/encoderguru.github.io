@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Spelling Alphabet Decoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.decode {
+    background: #2563eb;
+    color: white;
+}
+
+.decode:hover {
+    background: #1d4ed8;
+}
+
+.encode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.encode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+}
+
+select {
+    min-width: 260px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+}
+
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .option {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    select {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<a class="header-link" href="https://encoderguru.github.io">
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>Spelling Alphabet Decoder</h1>
+
+<p>
+Decode spelling alphabet words back into letters
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+<div class="editor-title">
+    Enter your encoded text
+</div>
+
+<p class="description">
+    Type or paste spelling alphabet words to decode.
+</p>
+
+<textarea
+    id="input"
+    placeholder="Enter encoded text..."
+></textarea>
+
+
+<div id="outputContainer">
+
+<div class="output-title">
+    Decoded output
+</div>
+
+<textarea
+    id="output"
+    readonly
+></textarea>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+    class="decode"
+    onclick="decodeText()"
+>
+    Decode
+</button>
+
+<button
+    class="encode"
+    onclick="openEncoder()"
+>
+    Encode
+</button>
+
+<button
+    class="clear"
+    onclick="clearText()"
+>
+    Clear
+</button>
+
+</div>
+
+
+<div class="customization">
+
+<div class="customization-title">
+    Customization
+</div>
+
+<div class="option">
+
+<div class="option-label">
+    Spelling alphabet
+</div>
+
+<select id="alphabet">
+
+<option value="nato">
+    NATO/ICAO
+</option>
+
+<option value="dutch">
+    Dutch
+</option>
+
+<option value="german">
+    German
+</option>
+
+<option value="swedish">
+    Swedish Armed Forces
+</option>
+
+<option value="russian-official">
+    Russian (Official excludes Ë)
+</option>
+
+<option value="russian-unofficial">
+    Russian (Unofficial includes Ë)
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+const alphabets = {
+
+nato: {
+    A:"Alfa", B:"Bravo", C:"Charlie", D:"Delta",
+    E:"Echo", F:"Foxtrot", G:"Golf", H:"Hotel",
+    I:"India", J:"Juliett", K:"Kilo", L:"Lima",
+    M:"Mike", N:"November", O:"Oscar", P:"Papa",
+    Q:"Quebec", R:"Romeo", S:"Sierra", T:"Tango",
+    U:"Uniform", V:"Victor", W:"Whiskey", X:"X-ray",
+    Y:"Yankee", Z:"Zulu"
+},
+
+dutch: {
+    A:"Anna", B:"Bernard", C:"Cornelis", D:"Dirk",
+    E:"Eduard", F:"Ferdinand", G:"Gerrit", H:"Hendrik",
+    I:"Isaac", J:"Jan", K:"Karel", L:"Lodewijk",
+    M:"Maria", N:"Nico", O:"Otto", P:"Pieter",
+    Q:"Quint", R:"Richard", S:"Simon", T:"Theo",
+    U:"Utrecht", V:"Victor", W:"Willem", X:"Xantippe",
+    Y:"Ypsilon", Z:"Zacharias"
+},
+
+german: {
+    A:"Anton", B:"Berta", C:"Cäsar", D:"Dora",
+    E:"Emil", F:"Friedrich", G:"Gustav", H:"Heinrich",
+    I:"Ida", J:"Julius", K:"Kaufmann", L:"Ludwig",
+    M:"Martha", N:"Nordpol", O:"Otto", P:"Paula",
+    Q:"Quelle", R:"Richard", S:"Samuel", T:"Theodor",
+    U:"Ulrich", V:"Viktor", W:"Wilhelm", X:"Xanthippe",
+    Y:"Ypsilon", Z:"Zacharias"
+},
+
+swedish: {
+    A:"Adam", B:"Bertil", C:"Cesar", D:"David",
+    E:"Erik", F:"Filip", G:"Gustav", H:"Helge",
+    I:"Ivar", J:"Johan", K:"Kalle", L:"Ludvig",
+    M:"Martin", N:"Niklas", O:"Olof", P:"Petter",
+    Q:"Quentin", R:"Rudolf", S:"Sigurd", T:"Tore",
+    U:"Urban", V:"Viktor", W:"Wilhelm", X:"Xerxes",
+    Y:"Yngve", Z:"Zäta"
+},
+
+"russian-official": {
+    А:"Анна", Б:"Борис", В:"Василий", Г:"Григорий",
+    Д:"Дмитрий", Е:"Елена", Ж:"Женя", З:"Зинаида",
+    И:"Иван", Й:"И краткое", К:"Константин", Л:"Леонид",
+    М:"Михаил", Н:"Николай", О:"Ольга", П:"Павел",
+    Р:"Роман", С:"Сергей", Т:"Татьяна", У:"Ульяна",
+    Ф:"Фёдор", Х:"Харитон", Ц:"Цапля", Ч:"Человек",
+    Ш:"Шура", Щ:"Щука", Ъ:"Твёрдый знак", Ы:"Ы",
+    Ь:"Мягкий знак", Э:"Эхо", Ю:"Юрий", Я:"Яков"
+},
+
+"russian-unofficial": {
+    А:"Анна", Б:"Борис", В:"Василий", Г:"Григорий",
+    Д:"Дмитрий", Е:"Елена", Ё:"Ёлка", Ж:"Женя",
+    З:"Зинаида", И:"Иван", Й:"И краткое", К:"Константин",
+    Л:"Леонид", М:"Михаил", Н:"Николай", О:"Ольга",
+    П:"Павел", Р:"Роман", С:"Сергей", Т:"Татьяна",
+    У:"Ульяна", Ф:"Фёдор", Х:"Харитон", Ц:"Цапля",
+    Ч:"Человек", Ш:"Шура", Щ:"Щука", Ъ:"Твёрдый знак",
+    Ы:"Ы", Ь:"Мягкий знак", Э:"Эхо", Ю:"Юрий", Я:"Яков"
+}
+
+};
+
+
+function decodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    if (!input) {
+        return;
+    }
+
+    const selected =
+        document.getElementById("alphabet").value;
+
+    const table =
+        alphabets[selected];
+
+    const reverse = {};
+
+    for (const letter in table) {
+
+        const word =
+            table[letter].toLowerCase();
+
+        reverse[word] =
+            letter;
+    }
+
+
+    const tokens =
+        input.trim().split(/\s+/);
+
+    let decoded = "";
+
+    for (const token of tokens) {
+
+        if (token === "/") {
+
+            decoded += " ";
+            continue;
+        }
+
+        const normalized =
+            token.toLowerCase();
+
+        if (reverse[normalized]) {
+
+            decoded +=
+                reverse[normalized];
+
+        } else {
+
+            decoded += token;
+        }
+    }
+
+
+    document.getElementById("output").value =
+        decoded;
+
+    document.getElementById("outputContainer")
+        .style.display = "block";
+}
+
+
+function openEncoder() {
+
+    window.location.href =
+        "/spellingencoder";
+}
+
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const savedData =
+            sessionStorage.getItem(
+                "spellingData"
+            );
+
+        const savedAlphabet =
+            sessionStorage.getItem(
+                "spellingAlphabet"
+            );
+
+        if (savedData) {
+
+            document.getElementById(
+                "input"
+            ).value = savedData;
+
+            if (savedAlphabet) {
+
+                document.getElementById(
+                    "alphabet"
+                ).value = savedAlphabet;
+            }
+
+            sessionStorage.removeItem(
+                "spellingData"
+            );
+
+            sessionStorage.removeItem(
+                "spellingAlphabet"
+            );
+
+            decodeText();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
