@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Base64 Encoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.encode {
+    background: #2563eb;
+    color: white;
+}
+
+.encode:hover {
+    background: #1d4ed8;
+}
+
+.decode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.decode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+}
+
+select {
+    min-width: 220px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .option {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    select {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <a
+        class="header-link"
+        href="https://encoderguru.github.io"
+    >
+
+        <img
+            class="logo"
+            src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+            alt="EncoderGuru"
+        >
+
+        <div class="brand">
+            Encoder<span>Guru</span>
+        </div>
+
+    </a>
+
+</header>
+
+
+<section class="banner">
+
+    <div>
+
+        <h1>Base64 Encoder</h1>
+
+        <p>
+            Encode text into Base64
+        </p>
+
+    </div>
+
+</section>
+
+
+<main>
+
+    <div class="editor-title">
+        Enter your text
+    </div>
+
+    <p class="description">
+        Type or paste the text you want to encode.
+    </p>
+
+    <textarea
+        id="input"
+        placeholder="Start typing..."
+    ></textarea>
+
+
+    <div id="outputContainer">
+
+        <div class="output-title">
+            Encoded output
+        </div>
+
+        <textarea
+            id="output"
+            readonly
+        ></textarea>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="encode"
+            onclick="encodeText()"
+        >
+            Encode
+        </button>
+
+        <button
+            class="decode"
+            onclick="openDecoder()"
+        >
+            Decode
+        </button>
+
+        <button
+            class="clear"
+            onclick="clearText()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+
+    <!-- CUSTOMIZATION -->
+
+    <div class="customization">
+
+        <div class="customization-title">
+            Customization
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Characterset
+            </div>
+
+            <select id="charset">
+
+                <option value="utf-8">
+                    UTF-8
+                </option>
+
+                <option value="ascii">
+                    ASCII
+                </option>
+
+                <option value="iso-8859-1">
+                    ISO-8859-1
+                </option>
+
+                <option value="windows-1252">
+                    Windows 1252
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Newline Separator
+            </div>
+
+            <select id="newline">
+
+                <option value="lf">
+                    LF (Unix)
+                </option>
+
+                <option value="crlf">
+                    CRLF (Windows)
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Others
+            </div>
+
+            <select id="dataUri">
+
+                <option value="none">
+                    None
+                </option>
+
+                <option value="data-uri">
+                    Data URI ( data:text/html;base64, )
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+newlinez
+*/
+
+function normalizeNewlines(text) {
+
+    /*
+        to Lf first
+    */
+
+    text = text.replace(/\r\n/g, "\n");
+    text = text.replace(/\r/g, "\n");
+
+
+    /*
+        crlf if you can
+    */
+
+    if (
+        document.getElementById("newline").value === "crlf"
+    ) {
+
+        text = text.replace(/\n/g, "\r\n");
+    }
+
+
+    return text;
+}
+
+
+/*
+Encode into bites
+*/
+
+function encodeWithCharset(text, charset) {
+
+    /*
+        UTF-8
+    */
+
+    if (charset === "utf-8") {
+
+        return new TextEncoder().encode(text);
+    }
+
+
+    /*
+        cant use something out ascii
+    */
+
+    if (charset === "ascii") {
+
+        const bytes = [];
+
+        for (const char of text) {
+
+            const code = char.charCodeAt(0);
+
+            if (code > 127) {
+
+                throw new Error(
+                    "ASCII only supports characters from U+0000 to U+007F."
+                );
+            }
+
+            bytes.push(code);
+        }
+
+        return new Uint8Array(bytes);
+    }
+
+
+    /*
+        one bite each!
+    */
+
+    if (charset === "iso-8859-1") {
+
+        const bytes = [];
+
+        for (const char of text) {
+
+            const code = char.charCodeAt(0);
+
+            if (code > 255) {
+
+                throw new Error(
+                    "ISO-8859-1 cannot represent " +
+                    JSON.stringify(char)
+                );
+            }
+
+            bytes.push(code);
+        }
+
+        return new Uint8Array(bytes);
+    }
+
+
+    /*
+if windows 1252 is available if not.. ⬇️
+    */
+
+    if (charset === "windows-1252") {
+
+        return encodeWindows1252(text);
+    }
+
+
+    throw new Error("Unknown characterset.");
+}
+
+
+/*
+windows 1252 thing
+*/
+
+const win1252EncodeMap = {
+    "€": 0x80,
+    "‚": 0x82,
+    "ƒ": 0x83,
+    "„": 0x84,
+    "…": 0x85,
+    "†": 0x86,
+    "‡": 0x87,
+    "ˆ": 0x88,
+    "‰": 0x89,
+    "Š": 0x8A,
+    "‹": 0x8B,
+    "Œ": 0x8C,
+    "Ž": 0x8E,
+    "‘": 0x91,
+    "’": 0x92,
+    "“": 0x93,
+    "”": 0x94,
+    "•": 0x95,
+    "–": 0x96,
+    "—": 0x97,
+    "˜": 0x98,
+    "™": 0x99,
+    "š": 0x9A,
+    "›": 0x9B,
+    "œ": 0x9C,
+    "ž": 0x9E,
+    "Ÿ": 0x9F
+};
+
+
+function encodeWindows1252(text) {
+
+    const bytes = [];
+
+    for (const char of text) {
+
+        const code = char.charCodeAt(0);
+
+        /*
+            Normal Windows-1252 byte
+        */
+
+        if (
+            code <= 0x7F ||
+            (code >= 0xA0 && code <= 0xFF)
+        ) {
+
+            bytes.push(code);
+            continue;
+        }
+
+
+        /*
+            Special Windows-1252 character
+        */
+
+        if (win1252EncodeMap[char] !== undefined) {
+
+            bytes.push(
+                win1252EncodeMap[char]
+            );
+
+            continue;
+        }
+
+
+        throw new Error(
+            "Windows-1252 cannot represent " +
+            JSON.stringify(char)
+        );
+    }
+
+    return new Uint8Array(bytes);
+}
+
+
+/*
+to base64
+*/
+
+function bytesToBase64(bytes) {
+
+    let binary = "";
+
+    const chunkSize = 0x8000;
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += chunkSize
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                i + chunkSize
+            )
+        );
+    }
+
+    return btoa(binary);
+}
+
+
+/*
+encode it
+*/
+
+function encodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    if (!input) {
+        return;
+    }
+
+    const charset =
+        document.getElementById("charset").value;
+
+    try {
+
+        const normalized =
+            normalizeNewlines(input);
+
+        const bytes =
+            encodeWithCharset(
+                normalized,
+                charset
+            );
+
+        let result =
+            bytesToBase64(bytes);
+
+
+        /*
+            Data URI option
+        */
+
+        if (
+            document.getElementById("dataUri").value
+            === "data-uri"
+        ) {
+
+            result =
+                "data:text/html;base64," +
+                result;
+        }
+
+
+        document.getElementById("output").value =
+            result;
+
+        document.getElementById("outputContainer")
+            .style.display = "block";
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/*
+get the decoder here
+*/
+
+function openDecoder() {
+
+    const encoded =
+        document.getElementById("output").value;
+
+    if (encoded) {
+
+        sessionStorage.setItem(
+            "base64Data",
+            encoded
+        );
+
+
+        /*
+            Also save customization settings.
+        */
+
+        sessionStorage.setItem(
+            "base64Charset",
+            document.getElementById("charset").value
+        );
+
+        sessionStorage.setItem(
+            "base64Newline",
+            document.getElementById("newline").value
+        );
+
+        sessionStorage.setItem(
+            "base64DataUri",
+            document.getElementById("dataUri").value
+        );
+    }
+
+    window.location.href =
+        "/base64decoder";
+}
+
+
+/*
+clear
+*/
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
