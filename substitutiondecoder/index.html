@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link rel="icon" type="image/png"
+href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Alphabetical Substitution Decoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.decode {
+    background: #2563eb;
+    color: white;
+}
+
+.decode:hover {
+    background: #1d4ed8;
+}
+
+.encode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.encode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    padding: 12px 0;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.alphabet-input {
+    width: 100%;
+    padding: 11px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+
+    outline: none;
+}
+
+select {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+}
+
+.help {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<a class="header-link" href="https://encoderguru.github.io">
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>Alphabetical Substitution Decoder</h1>
+
+<p>
+Decode text using a custom plaintext and ciphertext alphabet
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+<div class="editor-title">
+    Enter your text
+</div>
+
+<p class="description">
+    Type or paste the ciphertext you want to decode.
+</p>
+
+<textarea
+    id="input"
+    placeholder="Start typing..."
+></textarea>
+
+
+<div id="outputContainer">
+
+<div class="output-title">
+    Decoded output
+</div>
+
+<textarea
+    id="output"
+    readonly
+></textarea>
+
+</div>
+
+
+<div class="buttons">
+
+<button class="decode" onclick="decodeText()">
+    Decode
+</button>
+
+<button class="encode" onclick="openEncoder()">
+    Encode
+</button>
+
+<button class="clear" onclick="clearText()">
+    Clear
+</button>
+
+</div>
+
+
+<div class="customization">
+
+<div class="customization-title">
+    Customization
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Plaintext alphabet
+</div>
+
+<input
+    id="plainAlphabet"
+    class="alphabet-input"
+    type="text"
+    value="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Ciphertext alphabet
+</div>
+
+<input
+    id="cipherAlphabet"
+    class="alphabet-input"
+    type="text"
+    value="ZYXWVUTSRQPONMLKJIHGFEDCBA"
+>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Foreign characters
+</div>
+
+<select id="foreignCharacters">
+
+<option value="unallowed">
+    Unallowed
+</option>
+
+<option value="allowed">
+    Allowed
+</option>
+
+</select>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Case
+</div>
+
+<select id="caseMode">
+
+<option value="maintain">
+    Maintain case
+</option>
+
+<option value="strict">
+    Strict case
+</option>
+
+<option value="ignore">
+    Ignore case
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+function characters(text) {
+    return Array.from(text);
+}
+
+
+function hasDuplicates(text) {
+
+    const chars = characters(text);
+
+    return new Set(chars).size !== chars.length;
+}
+
+
+function getSettings() {
+
+    return {
+        plain: document.getElementById("plainAlphabet").value,
+        cipher: document.getElementById("cipherAlphabet").value,
+        foreign: document.getElementById("foreignCharacters").value,
+        caseMode: document.getElementById("caseMode").value
+    };
+}
+
+
+function validateSettings(settings) {
+
+    const plainLength =
+        characters(settings.plain).length;
+
+    const cipherLength =
+        characters(settings.cipher).length;
+
+    if (!plainLength) {
+
+        alert(
+            "The plaintext alphabet cannot be empty."
+        );
+
+        return false;
+    }
+
+    if (!cipherLength) {
+
+        alert(
+            "The ciphertext alphabet cannot be empty."
+        );
+
+        return false;
+    }
+
+    if (cipherLength > plainLength) {
+
+        alert(
+            "The ciphertext alphabet cannot be longer than the plaintext alphabet."
+        );
+
+        return false;
+    }
+
+    if (hasDuplicates(settings.plain)) {
+
+        alert(
+            "The plaintext alphabet cannot contain duplicate characters."
+        );
+
+        return false;
+    }
+
+    if (hasDuplicates(settings.cipher)) {
+
+        alert(
+            "The ciphertext alphabet cannot contain duplicate characters."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+/*
+ughhh index?
+*/
+
+function findCipherIndex(
+    character,
+    alphabet,
+    mode
+) {
+
+    if (mode === "strict") {
+        return alphabet.indexOf(character);
+    }
+
+    const lower =
+        character.toLocaleLowerCase();
+
+    const chars =
+        characters(alphabet);
+
+    for (let i = 0; i < chars.length; i++) {
+
+        if (
+            chars[i].toLocaleLowerCase() ===
+            lower
+        ) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+
+function preserveCase(source, target) {
+
+    const isUpper =
+        source !== source.toLocaleLowerCase() &&
+        source === source.toLocaleUpperCase();
+
+    const isLower =
+        source !== source.toLocaleUpperCase() &&
+        source === source.toLocaleLowerCase();
+
+    if (isUpper) {
+        return target.toLocaleUpperCase();
+    }
+
+    if (isLower) {
+        return target.toLocaleLowerCase();
+    }
+
+    return target;
+}
+
+
+function decodeCharacter(character, settings) {
+
+    const plainChars =
+        characters(settings.plain);
+
+    const cipherChars =
+        characters(settings.cipher);
+
+    const index =
+        findCipherIndex(
+            character,
+            settings.cipher,
+            settings.caseMode
+        );
+
+    if (index === -1) {
+
+        if (
+            settings.foreign === "allowed" ||
+            /\s/u.test(character)
+        ) {
+            return character;
+        }
+
+        return null;
+    }
+
+    if (index >= plainChars.length) {
+        return character;
+    }
+
+    let result =
+        plainChars[index];
+
+    if (settings.caseMode === "maintain") {
+        result =
+            preserveCase(character, result);
+    }
+
+    return result;
+}
+
+
+function decodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    if (!input) {
+        return;
+    }
+
+    const settings =
+        getSettings();
+
+    if (!validateSettings(settings)) {
+        return;
+    }
+
+    let output = "";
+
+    for (const character of characters(input)) {
+
+        const result =
+            decodeCharacter(
+                character,
+                settings
+            );
+
+        if (result === null) {
+
+            alert(
+                "Unsupported character: " +
+                JSON.stringify(character)
+            );
+
+            return;
+        }
+
+        output += result;
+    }
+
+    document.getElementById("output").value =
+        output;
+
+    document.getElementById("outputContainer")
+        .style.display = "block";
+}
+
+
+function openEncoder() {
+
+    window.location.href =
+        "/substitutionencoder";
+}
+
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const plain =
+            sessionStorage.getItem(
+                "substitutionPlain"
+            );
+
+        const cipher =
+            sessionStorage.getItem(
+                "substitutionCipher"
+            );
+
+        const foreign =
+            sessionStorage.getItem(
+                "substitutionForeign"
+            );
+
+        const caseMode =
+            sessionStorage.getItem(
+                "substitutionCase"
+            );
+
+        const data =
+            sessionStorage.getItem(
+                "substitutionData"
+            );
+
+
+        if (plain !== null) {
+
+            document.getElementById(
+                "plainAlphabet"
+            ).value = plain;
+        }
+
+        if (cipher !== null) {
+
+            document.getElementById(
+                "cipherAlphabet"
+            ).value = cipher;
+        }
+
+        if (foreign !== null) {
+
+            document.getElementById(
+                "foreignCharacters"
+            ).value = foreign;
+        }
+
+        if (caseMode !== null) {
+
+            document.getElementById(
+                "caseMode"
+            ).value = caseMode;
+        }
+
+
+        if (data) {
+
+            document.getElementById(
+                "input"
+            ).value = data;
+
+            sessionStorage.removeItem(
+                "substitutionPlain"
+            );
+
+            sessionStorage.removeItem(
+                "substitutionCipher"
+            );
+
+            sessionStorage.removeItem(
+                "substitutionForeign"
+            );
+
+            sessionStorage.removeItem(
+                "substitutionCase"
+            );
+
+            sessionStorage.removeItem(
+                "substitutionData"
+            );
+
+            decodeText();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
