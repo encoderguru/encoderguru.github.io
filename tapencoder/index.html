@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Tap Code Encoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.encode {
+    background: #2563eb;
+    color: white;
+}
+
+.encode:hover {
+    background: #1d4ed8;
+}
+
+.decode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.decode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+}
+
+select,
+input[type="text"] {
+    min-width: 260px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+}
+
+input[type="text"] {
+    min-width: 120px;
+    width: 120px;
+}
+
+select:focus,
+input[type="text"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .option {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    select,
+    input[type="text"] {
+        width: 100%;
+        min-width: 0;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<a class="header-link" href="https://encoderguru.github.io">
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>Tap Code Encoder</h1>
+
+<p>
+Encode text using dots or your own custom tap symbol
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+<div class="editor-title">
+    Enter your text
+</div>
+
+<p class="description">
+    Type or paste the text you want to encode.
+</p>
+
+<textarea
+    id="input"
+    placeholder="Start typing..."
+></textarea>
+
+
+<div id="outputContainer">
+
+<div class="output-title">
+    Encoded output
+</div>
+
+<textarea
+    id="output"
+    readonly
+></textarea>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+    class="encode"
+    onclick="encodeText()"
+>
+    Encode
+</button>
+
+<button
+    class="decode"
+    onclick="openDecoder()"
+>
+    Decode
+</button>
+
+<button
+    class="clear"
+    onclick="clearText()"
+>
+    Clear
+</button>
+
+</div>
+
+
+<div class="customization">
+
+<div class="customization-title">
+    Customization
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Alphabet
+</div>
+
+<select id="alphabet">
+
+<option value="official">
+    Official
+</option>
+
+<option value="frequency">
+    Frequency
+</option>
+
+</select>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Tap symbol
+</div>
+
+<input
+    type="text"
+    id="tapSymbol"
+    value="."
+    maxlength="1"
+>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+Official Tap Code
+
+C and K share a cell
+*/
+
+const officialAlphabet = [
+    ["A", "B", "C/K", "D", "E"],
+    ["F", "G", "H", "I", "J"],
+    ["L", "M", "N", "O", "P"],
+    ["Q", "R", "S", "T", "U"],
+    ["V", "W", "X", "Y", "Z"]
+];
+
+
+/*
+Frequency Tap Code
+
+The alphabet is based on English letter
+frequency, with the most frequent letters
+assigned to the shortest/easiest positions
+
+C and K share the final available cell
+*/
+
+const frequencyAlphabet = [
+    ["E", "T", "A", "O", "I"],
+    ["N", "S", "H", "R", "D"],
+    ["L", "C/K", "U", "M", "W"],
+    ["F", "G", "Y", "P", "B"],
+    ["V", "J", "X", "Q", "Z"]
+];
+
+
+function getAlphabet() {
+
+    const selected =
+        document.getElementById("alphabet").value;
+
+    if (selected === "frequency") {
+        return frequencyAlphabet;
+    }
+
+    return officialAlphabet;
+}
+
+
+function findPosition(character) {
+
+    const alphabet = getAlphabet();
+
+    for (let row = 0; row < 5; row++) {
+
+        for (let column = 0; column < 5; column++) {
+
+            const cell =
+                alphabet[row][column];
+
+            if (
+                cell === character ||
+                cell.includes(character)
+            ) {
+
+                return {
+                    row: row + 1,
+                    column: column + 1
+                };
+            }
+        }
+    }
+
+    return null;
+}
+
+
+function encodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    if (!input) {
+        return;
+    }
+
+    let symbol =
+        document.getElementById("tapSymbol").value;
+
+    if (!symbol) {
+        symbol = ".";
+        document.getElementById("tapSymbol").value = ".";
+    }
+
+    const encoded = [];
+
+    for (const character of input) {
+
+        if (character === " ") {
+
+            encoded.push("/");
+
+            continue;
+        }
+
+        if (character === "\n") {
+
+            encoded.push("\n");
+
+            continue;
+        }
+
+        const upper =
+            character.toUpperCase();
+
+        const position =
+            findPosition(upper);
+
+        if (!position) {
+
+            alert(
+                "Unsupported character: " +
+                JSON.stringify(character)
+            );
+
+            return;
+        }
+
+        const taps =
+            symbol.repeat(position.row) +
+            " " +
+            symbol.repeat(position.column);
+
+        encoded.push(taps);
+    }
+
+    document.getElementById("output").value =
+        encoded.join(" ");
+
+    document.getElementById("outputContainer")
+        .style.display = "block";
+}
+
+
+function openDecoder() {
+
+    const encoded =
+        document.getElementById("output").value;
+
+    if (encoded) {
+
+        sessionStorage.setItem(
+            "tapCodeData",
+            encoded
+        );
+
+        sessionStorage.setItem(
+            "tapCodeAlphabet",
+            document.getElementById("alphabet").value
+        );
+
+        sessionStorage.setItem(
+            "tapCodeSymbol",
+            document.getElementById("tapSymbol").value
+        );
+    }
+
+    window.location.href =
+        "/tapdecoder";
+}
+
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
