@@ -1,1 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content ="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Online Encoders & Decoders</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+
+/* HEADER */
+
+header {
+    height: 72px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 30px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    text-decoration: none;
+
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+
+/* BANNER */
+
+.banner {
+    width: 100%;
+    height: 260px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+
+    font-size: 46px;
+
+    letter-spacing: -1px;
+}
+
+.banner p {
+    max-width: 650px;
+
+    margin: 12px auto 0;
+
+    font-size: 17px;
+
+    line-height: 1.5;
+}
+
+
+/* MAIN */
+
+main {
+    max-width: 1000px;
+
+    margin: 50px auto;
+
+    padding: 0 22px;
+}
+
+
+/* INTRO */
+
+.intro {
+    text-align: center;
+
+    max-width: 720px;
+
+    margin: 0 auto 45px;
+}
+
+.intro h2 {
+    margin: 0 0 12px;
+
+    font-size: 28px;
+}
+
+.intro p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+}
+
+
+/* SEARCH */
+
+.search {
+    margin-bottom: 25px;
+}
+
+.search input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid #d8dee9;
+
+    border-radius: 9px;
+
+    background: #fff;
+
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.search input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,.10);
+}
+
+.search input::placeholder {
+    color: #94a3b8;
+}
+
+
+/* TOOL LIST */
+
+.tools-title {
+    font-size: 21px;
+
+    font-weight: 700;
+
+    margin-bottom: 15px;
+}
+
+.tool-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.tool {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 20px;
+
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    color: #172033;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s,
+        transform .15s;
+}
+
+.tool:hover {
+    border-color: #cbd5e1;
+
+    box-shadow:
+        0 4px 12px
+        rgba(15,23,42,.06);
+
+    transform: translateY(-1px);
+}
+
+.tool-info {
+    min-width: 0;
+}
+
+.tool-name {
+    font-size: 17px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.tool-description {
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+}
+
+.tool-arrow {
+    flex-shrink: 0;
+
+    color: #2563eb;
+
+    font-size: 22px;
+}
+
+
+/* NO RESULTS */
+
+.no-results {
+    display: none;
+
+    text-align: center;
+
+    padding: 30px;
+
+    color: #94a3b8;
+}
+
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+
+    padding: 35px 20px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 220px;
+
+        padding: 20px;
+    }
+
+    .banner h1 {
+        font-size: 34px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 35px;
+    }
+
+    .tool {
+        padding: 16px;
+    }
+
+    .tool-arrow {
+        font-size: 19px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<a
+    class="header-link"
+    href="https://encoderguru.github.io"
+>
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>EncoderGuru</h1>
+
+<p>
+Simple online tools for encoding, decoding,
+encrypting, and transforming text.
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+
+<section class="intro">
+
+<h2>
+Encoding tools, made simple.
+</h2>
+
+<p>
+EncoderGuru is a collection of easy-to-use
+encoders and decoders for working with
+different text formats, ciphers, and
+encoding systems. Choose a tool below
+to get started.
+</p>
+
+</section>
+
+
+<div class="search">
+
+<input
+    type="text"
+    id="search"
+    placeholder="Search encoders and decoders..."
+    autocomplete="off"
+>
+
+</div>
+
+
+<div class="tools-title">
+Available tools
+</div>
+
+
+<div class="tool-list" id="toolList">
+
+
+<a
+    class="tool"
+    href="/huffmanencoder"
+    data-search="huffman huffman encoder decoder compression"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Huffman
+</div>
+
+<div class="tool-description">
+Huffman coding using a frequency-based binary tree.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/base64encoder"
+    data-search="base64 base 64 encoder decoder"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Base64
+</div>
+
+<div class="tool-description">
+Encode and decode data using Base64.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/base32encoder"
+    data-search="base32 base 32 encoder decoder"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Base32
+</div>
+
+<div class="tool-description">
+Encode and decode data using Base32.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/ceaserencoder"
+    data-search="caesar ceaser cipher encoder decoder shift"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Caesar Cipher
+</div>
+
+<div class="tool-description">
+Shift letters through the alphabet using a Caesar cipher.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/vigenereencoder"
+    data-search="vigenere cipher encoder decoder"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Vigenère Cipher
+</div>
+
+<div class="tool-description">
+Encrypt and decrypt text using a repeating keyword.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/railfenceencoder"
+    data-search="rail fence railfence cipher encoder decoder"
+>
+
+<div class="tool-info">
+
+<div class="tool-name">
+Rail Fence Cipher
+</div>
+
+<div class="tool-description">
+Rearrange text using the Rail Fence transposition cipher.
+</div>
+
+</div>
+
+<div class="tool-arrow">
+→
+</div>
+
+</a>
+
+<a
+    class="tool"
+    href="/baconencoder"
+    data-search="bacon baconian cipher encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Bacon Cipher
+        </div>
+
+        <div class="tool-description">
+            Encode text using the Baconian cipher.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/spellingencoder"
+    data-search="spelling alphabet nato icao dutch german swedish russian"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Spelling Alphabet
+        </div>
+
+        <div class="tool-description">
+            Convert letters using NATO/ICAO and other spelling alphabets.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/tapencoder"
+    data-search="tap code tap encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Tap Code
+        </div>
+
+        <div class="tool-description">
+            Encode and decode text using a 5×5 tap-code grid.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/unicodeencoder"
+    data-search="unicode code point decimal hexadecimal binary octal ncr"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Unicode Code Points
+        </div>
+
+        <div class="tool-description">
+            Convert characters to and from Unicode code-point representations.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/substitutionencoder"
+    data-search="alphabetical substitution substitution cipher encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Alphabetical Substitution
+        </div>
+
+        <div class="tool-description">
+            Create your own plaintext-to-ciphertext alphabet substitution.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/morseencoder"
+    data-search="morse morse code encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Morse Code
+        </div>
+
+        <div class="tool-description">
+            Encode and decode text using Morse code.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/rotencoder"
+    data-search="rot13 rot18 rot47 rotation cipher encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            ROT13 / ROT18 / ROT47
+        </div>
+
+        <div class="tool-description">
+            Transform text using one of the ROT family ciphers.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/blockencoder"
+    data-search="block cipher aes aes 128 aes 256 cbc ctr encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            AES Block Cipher
+        </div>
+
+        <div class="tool-description">
+            Encrypt and decrypt data using AES-128 or AES-256.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+
+<a
+    class="tool"
+    href="/affineencoder"
+    data-search="affine cipher encoder decoder"
+>
+
+    <div class="tool-info">
+
+        <div class="tool-name">
+            Affine Cipher
+        </div>
+
+        <div class="tool-description">
+            Encrypt and decrypt letters using an affine mathematical transformation.
+        </div>
+
+    </div>
+
+    <div class="tool-arrow">
+        →
+    </div>
+
+</a>
+
+</div>
+
+
+<div
+    class="no-results"
+    id="noResults"
+>
+    No matching tools found.
+</div>
+
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+const search =
+    document.getElementById("search");
+
+const tools =
+    document.querySelectorAll(".tool");
+
+const noResults =
+    document.getElementById("noResults");
+
+
+search.addEventListener(
+    "input",
+    function() {
+
+        const query =
+            this.value
+                .toLowerCase()
+                .trim();
+
+        let visible = 0;
+
+
+        tools.forEach(
+            function(tool) {
+
+                const searchable =
+                    tool.dataset.search
+                        .toLowerCase();
+
+                const matches =
+                    searchable.includes(query);
+
+
+                tool.style.display =
+                    matches
+                        ? "flex"
+                        : "none";
+
+
+                if (matches) {
+                    visible++;
+                }
+
+            }
+        );
+
+
+        noResults.style.display =
+            visible === 0
+                ? "block"
+                : "none";
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>
