@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Base64 Decoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.decode {
+    background: #2563eb;
+    color: white;
+}
+
+.decode:hover {
+    background: #1d4ed8;
+}
+
+.encode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.encode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================
+   CUSTOMIZATION
+========================= */
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+}
+
+select {
+    min-width: 220px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .option {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    select {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <a
+        class="header-link"
+        href="https://encoderguru.github.io"
+    >
+
+        <img
+            class="logo"
+            src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+            alt="EncoderGuru"
+        >
+
+        <div class="brand">
+            Encoder<span>Guru</span>
+        </div>
+
+    </a>
+
+</header>
+
+
+<section class="banner">
+
+    <div>
+
+        <h1>Base64 Decoder</h1>
+
+        <p>
+            Decode Base64 back into text
+        </p>
+
+    </div>
+
+</section>
+
+
+<main>
+
+    <div class="editor-title">
+        Enter your Base64
+    </div>
+
+    <p class="description">
+        Type or paste the Base64 data you want to decode.
+    </p>
+
+    <textarea
+        id="input"
+        placeholder="Enter Base64..."
+    ></textarea>
+
+
+    <div id="outputContainer">
+
+        <div class="output-title">
+            Decoded output
+        </div>
+
+        <textarea
+            id="output"
+            readonly
+        ></textarea>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="decode"
+            onclick="decodeText()"
+        >
+            Decode
+        </button>
+
+        <button
+            class="encode"
+            onclick="openEncoder()"
+        >
+            Encode
+        </button>
+
+        <button
+            class="clear"
+            onclick="clearText()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+
+    <div class="customization">
+
+        <div class="customization-title">
+            Customization
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Characterset
+            </div>
+
+            <select id="charset">
+
+                <option value="utf-8">
+                    UTF-8
+                </option>
+
+                <option value="ascii">
+                    ASCII
+                </option>
+
+                <option value="iso-8859-1">
+                    ISO-8859-1
+                </option>
+
+                <option value="windows-1252">
+                    Windows 1252
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Newline Separator
+            </div>
+
+            <select id="newline">
+
+                <option value="lf">
+                    LF (Unix)
+                </option>
+
+                <option value="crlf">
+                    CRLF (Windows)
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="option">
+
+            <div class="option-label">
+                Others
+            </div>
+
+            <select id="dataUri">
+
+                <option value="none">
+                    None
+                </option>
+
+                <option value="data-uri">
+                    Data URI ( data:text/html;base64, )
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+uggghhh windows 1252
+*/
+
+const win1252DecodeMap = {
+
+    0x80: "€",
+    0x82: "‚",
+    0x83: "ƒ",
+    0x84: "„",
+    0x85: "…",
+    0x86: "†",
+    0x87: "‡",
+    0x88: "ˆ",
+    0x89: "‰",
+    0x8A: "Š",
+    0x8B: "‹",
+    0x8C: "Œ",
+    0x8E: "Ž",
+    0x91: "‘",
+    0x92: "’",
+    0x93: "“",
+    0x94: "”",
+    0x95: "•",
+    0x96: "–",
+    0x97: "—",
+    0x98: "˜",
+    0x99: "™",
+    0x9A: "š",
+    0x9B: "›",
+    0x9C: "œ",
+    0x9E: "ž",
+    0x9F: "Ÿ"
+};
+
+
+/*
+base64 into bites!!!
+*/
+
+function base64ToBytes(base64) {
+
+    /*
+        Remove whitespace.
+    */
+
+    base64 =
+        base64.replace(/\s/g, "");
+
+    const binary =
+        atob(base64);
+
+    const bytes =
+        new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+
+        bytes[i] =
+            binary.charCodeAt(i);
+    }
+
+    return bytes;
+}
+
+
+/*
+decode using charset
+*/
+
+function decodeBytes(bytes, charset) {
+
+    /*
+        UTF-8
+    */
+
+    if (charset === "utf-8") {
+
+        return new TextDecoder(
+            "utf-8",
+            { fatal: true }
+        ).decode(bytes);
+    }
+
+
+    /*
+        asciii
+    */
+
+    if (charset === "ascii") {
+
+        for (const byte of bytes) {
+
+            if (byte > 127) {
+
+                throw new Error(
+                    "The data contains bytes that are not valid ASCII."
+                );
+            }
+        }
+
+        return Array.from(bytes)
+            .map(byte => String.fromCharCode(byte))
+            .join("");
+    }
+
+
+    /*
+iso whatever
+    */
+
+    if (charset === "iso-8859-1") {
+
+        return new TextDecoder(
+            "iso-8859-1"
+        ).decode(bytes);
+    }
+
+
+    /*
+i hate this charset
+    */
+
+    if (charset === "windows-1252") {
+
+        let result = "";
+
+        for (const byte of bytes) {
+
+            if (win1252DecodeMap[byte]) {
+
+                result +=
+                    win1252DecodeMap[byte];
+
+            } else {
+
+                result +=
+                    String.fromCharCode(byte);
+            }
+        }
+
+        return result;
+    }
+
+
+    throw new Error(
+        "Unknown characterset."
+    );
+}
+
+
+/*
+newlines now
+*/
+
+function normalizeDecodedNewlines(text) {
+
+    /*
+        First convert all newline styles to LF.
+    */
+
+    text =
+        text.replace(/\r\n/g, "\n");
+
+    text =
+        text.replace(/\r/g, "\n");
+
+
+    /*
+        Convert to CRLF if requested.
+    */
+
+    if (
+        document.getElementById("newline").value
+        === "crlf"
+    ) {
+
+        text =
+            text.replace(/\n/g, "\r\n");
+    }
+
+
+    return text;
+}
+
+
+/*
+decode
+*/
+
+function decodeText() {
+
+    let input =
+        document.getElementById("input").value.trim();
+
+    if (!input) {
+        return;
+    }
+
+
+    /*
+        if data uri is there (you should be able to remove it yourself but alright)
+    */
+
+    const dataUriPrefix =
+        "data:text/html;base64,";
+
+    if (
+        input
+            .toLowerCase()
+            .startsWith(
+                dataUriPrefix
+            )
+    ) {
+
+        input =
+            input.substring(
+                dataUriPrefix.length
+            );
+    }
+
+
+    try {
+
+        const bytes =
+            base64ToBytes(input);
+
+        const charset =
+            document.getElementById(
+                "charset"
+            ).value;
+
+        let result =
+            decodeBytes(
+                bytes,
+                charset
+            );
+
+
+        result =
+            normalizeDecodedNewlines(
+                result
+            );
+
+
+        document.getElementById(
+            "output"
+        ).value = result;
+
+        document.getElementById(
+            "outputContainer"
+        ).style.display = "block";
+
+    } catch (error) {
+
+        alert(
+            "Invalid Base64 or incompatible character data.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+/*
+get encoder
+*/
+
+function openEncoder() {
+
+    window.location.href =
+        "/base64encoder";
+}
+
+
+/*
+Clear!
+*/
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+
+/*
+get data from encoder
+*/
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const savedData =
+            sessionStorage.getItem(
+                "base64Data"
+            );
+
+        if (savedData) {
+
+            document.getElementById(
+                "input"
+            ).value = savedData;
+
+
+            /*
+                Restore the encoder's settings.
+            */
+
+            const savedCharset =
+                sessionStorage.getItem(
+                    "base64Charset"
+                );
+
+            const savedNewline =
+                sessionStorage.getItem(
+                    "base64Newline"
+                );
+
+            const savedDataUri =
+                sessionStorage.getItem(
+                    "base64DataUri"
+                );
+
+
+            if (savedCharset) {
+
+                document.getElementById(
+                    "charset"
+                ).value = savedCharset;
+            }
+
+            if (savedNewline) {
+
+                document.getElementById(
+                    "newline"
+                ).value = savedNewline;
+            }
+
+            if (savedDataUri) {
+
+                document.getElementById(
+                    "dataUri"
+                ).value = savedDataUri;
+            }
+
+
+            sessionStorage.removeItem(
+                "base64Data"
+            );
+
+            sessionStorage.removeItem(
+                "base64Charset"
+            );
+
+            sessionStorage.removeItem(
+                "base64Newline"
+            );
+
+            sessionStorage.removeItem(
+                "base64DataUri"
+            );
+
+
+            decodeText();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
