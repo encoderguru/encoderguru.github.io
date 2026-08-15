@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EncoderGuru - Morse Decoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus,
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.decode {
+    background: #2563eb;
+    color: white;
+}
+
+.decode:hover {
+    background: #1d4ed8;
+}
+
+.encode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.encode:hover {
+    background: #bfdbfe;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+.customization {
+    margin-top: 30px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 24px;
+}
+
+.customization-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option {
+    padding: 12px 0;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option-label {
+    color: #475569;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+select {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 8px;
+
+    background: white;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    outline: none;
+}
+
+.help {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<a class="header-link" href="https://encoderguru.github.io">
+
+<img
+    class="logo"
+    src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+    alt="EncoderGuru"
+>
+
+<div class="brand">
+    Encoder<span>Guru</span>
+</div>
+
+</a>
+
+</header>
+
+
+<section class="banner">
+
+<div>
+
+<h1>Morse Decoder</h1>
+
+<p>
+Decode Morse Code back into text
+</p>
+
+</div>
+
+</section>
+
+
+<main>
+
+<div class="editor-title">
+    Enter your Morse code
+</div>
+
+<p class="description">
+    Type or paste the Morse code you want to decode.
+</p>
+
+<textarea
+    id="input"
+    placeholder="Start typing..."
+></textarea>
+
+
+<div id="outputContainer">
+
+<div class="output-title">
+    Decoded output
+</div>
+
+<textarea
+    id="output"
+    readonly
+></textarea>
+
+</div>
+
+
+<div class="buttons">
+
+<button class="decode" onclick="decodeText()">
+    Decode
+</button>
+
+<button class="encode" onclick="openEncoder()">
+    Encode
+</button>
+
+<button class="clear" onclick="clearText()">
+    Clear
+</button>
+
+</div>
+
+
+<div class="customization">
+
+<div class="customization-title">
+    Customization
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Morse alphabet
+</div>
+
+<select id="alphabet">
+
+<option value="official">
+    Official
+</option>
+
+<option value="optimized">
+    Optimized
+</option>
+
+</select>
+
+<div class="help">
+    Select the alphabet used to decode the Morse code.
+</div>
+
+</div>
+
+
+<div class="option">
+
+<div class="option-label">
+    Foreign characters
+</div>
+
+<select id="foreign">
+
+<option value="enabled">
+    Enabled
+</option>
+
+<option value="disabled">
+    Disabled
+</option>
+
+</select>
+
+<div class="help">
+    Decode Unicode code-point sequences beginning with &.
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+© 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+ofical
+*/
+
+const officialMorse = {
+
+"A": ".-",
+"B": "-...",
+"C": "-.-.",
+"D": "-..",
+"E": ".",
+"F": "..-.",
+"G": "--.",
+"H": "....",
+"I": "..",
+"J": ".---",
+"K": "-.-",
+"L": ".-..",
+"M": "--",
+"N": "-.",
+"O": "---",
+"P": ".--.",
+"Q": "--.-",
+"R": ".-.",
+"S": "...",
+"T": "-",
+"U": "..-",
+"V": "...-",
+"W": ".--",
+"X": "-..-",
+"Y": "-.--",
+"Z": "--..",
+
+"0": "-----",
+"1": ".----",
+"2": "..---",
+"3": "...--",
+"4": "....-",
+"5": ".....",
+"6": "-....",
+"7": "--...",
+"8": "---..",
+"9": "----.",
+
+".": ".-.-.-",
+",": "--..--",
+"?": "..--..",
+"'": ".----.",
+"!": "-.-.--",
+"/": "-..-.",
+"(": "-.--.",
+")": "-.--.-",
+"&": ".-...",
+":": "---...",
+";": "-.-.-.",
+"=": "-...-",
+"+": ".-.-.",
+"-": "-....-",
+"_": "..--.-",
+"\"": ".-..-.",
+"$": "...-..-",
+"@": ".--.-."
+};
+
+
+/*
+optimiiiiality
+*/
+
+const optimizedOrder = [
+"E","T","A","O","I","N","S","H","R","D",
+"L","C","U","M","W","F","G","Y","P","B",
+"V","K","J","X","Q","Z"
+];
+
+const optimizedCodes = [
+".",
+"-",
+"..",
+".-",
+"-.",
+"--",
+"...",
+"..-",
+".-.",
+".--",
+"-..",
+"-.-",
+"--.",
+"---",
+"....",
+"...-",
+"..-.",
+"..--",
+".-..",
+".-.-",
+".--.",
+".---",
+"-...",
+"-..-",
+"-.-.",
+"-.--"
+];
+
+function buildOptimizedMorse() {
+
+    const result = {};
+
+    for (let i = 0; i < optimizedOrder.length; i++) {
+
+        result[
+            optimizedOrder[i]
+        ] = optimizedCodes[i];
+    }
+
+    return result;
+}
+
+const optimizedMorse =
+    buildOptimizedMorse();
+
+
+function getAlphabet() {
+
+    return document.getElementById("alphabet").value === "optimized"
+        ? optimizedMorse
+        : officialMorse;
+}
+
+
+/*
+morse recerse
+*/
+
+function reverseMorse(morse) {
+
+    const reverse = {};
+
+    for (const character in morse) {
+
+        reverse[morse[character]] =
+            character;
+    }
+
+    return reverse;
+}
+
+
+/*
+unicode reversio
+*/
+
+function decodeUnicode(sequence, morse) {
+
+    const reverse = reverseMorse(morse);
+
+    const pieces = sequence.trim().split(/\s+/);
+
+    let hex = "";
+
+    for (const piece of pieces) {
+
+        if (!reverse[piece]) {
+            return null;
+        }
+
+        hex += reverse[piece];
+    }
+
+    // Unicode code points are hexadecimal
+    if (!/^[0-9A-F]+$/i.test(hex)) {
+        return null;
+    }
+
+    const codePoint = parseInt(hex, 16);
+
+    if (
+        !Number.isFinite(codePoint) ||
+        codePoint > 0x10FFFF ||
+        (
+            codePoint >= 0xD800 &&
+            codePoint <= 0xDFFF
+        )
+    ) {
+        return null;
+    }
+
+    return String.fromCodePoint(codePoint);
+}
+
+
+/*
+speperpatir detection
+*/
+
+function splitWords(input) {
+
+    /*
+    Slash separator
+*/
+
+    if (/(^|\s)\/(\s|$)/.test(input)) {
+
+        return input
+            .trim()
+            .split(/\s*\/\s*/);
+    }
+
+
+    /*
+    Three-or-more-space separator
+    */
+
+    return input
+        .trim()
+        .split(/\s{3,}/);
+}
+
+
+/*
+finally decoding part
+*/
+
+function decodeText() {
+
+    const input =
+        document.getElementById("input").value;
+
+    if (!input.trim()) {
+        return;
+    }
+
+
+    const morse =
+        getAlphabet();
+
+    const reverse =
+        reverseMorse(morse);
+
+    const foreign =
+        document.getElementById("foreign").value;
+
+
+    const words =
+        splitWords(input);
+
+
+    let decodedWords = [];
+
+
+    for (const word of words) {
+
+        const symbols =
+            word.trim().split(/\s+/);
+
+        let decoded = "";
+
+
+        for (let i = 0; i < symbols.length; i++) {
+
+            const symbol =
+                symbols[i];
+
+
+            /*
+            Unicode marker.
+
+            The encoder outputs:
+
+            & [Morse for U] [Morse for hex]...
+            */
+
+            if (
+                symbol === "&" &&
+                foreign === "enabled"
+            ) {
+
+                let sequence = [];
+                let found = false;
+
+
+                for (
+                    let j = i + 1;
+                    j < symbols.length;
+                    j++
+                ) {
+
+                    sequence.push(
+                        symbols[j]
+                    );
+
+
+                    const candidate =
+                        decodeUnicode(
+                            sequence.join(" "),
+                            morse
+                        );
+
+
+                    if (candidate !== null) {
+
+                        decoded += candidate;
+
+                        i = j;
+
+                        found = true;
+
+                        break;
+                    }
+                }
+
+
+                if (!found) {
+
+                    alert(
+                        "Invalid Unicode Morse sequence."
+                    );
+
+                    return;
+                }
+
+                continue;
+            }
+
+
+            /*
+            Normal Morse character.
+            */
+
+            if (reverse[symbol]) {
+
+                decoded +=
+                    reverse[symbol];
+
+                continue;
+            }
+
+
+            alert(
+                "Invalid Morse sequence: " +
+                JSON.stringify(symbol)
+            );
+
+            return;
+        }
+
+
+        decodedWords.push(decoded);
+    }
+
+
+    document.getElementById("output").value =
+        decodedWords.join(" ");
+
+    document.getElementById("outputContainer")
+        .style.display = "block";
+}
+
+
+/*
+open encoder
+*/
+
+function openEncoder() {
+
+    const output =
+        document.getElementById("output").value;
+
+    if (output) {
+
+        sessionStorage.setItem(
+            "morseData",
+            output
+        );
+    }
+
+
+    sessionStorage.setItem(
+        "morseAlphabet",
+        document.getElementById("alphabet").value
+    );
+
+
+    sessionStorage.setItem(
+        "morseForeign",
+        document.getElementById("foreign").value
+    );
+
+
+    window.location.href =
+        "/morseencoder";
+}
+
+
+/*
+Clear!
+*/
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+
+/*
+load it
+*/
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const alphabet =
+            sessionStorage.getItem(
+                "morseAlphabet"
+            );
+
+        const foreign =
+            sessionStorage.getItem(
+                "morseForeign"
+            );
+
+        const data =
+            sessionStorage.getItem(
+                "morseData"
+            );
+
+
+        if (alphabet !== null) {
+
+            document.getElementById(
+                "alphabet"
+            ).value = alphabet;
+        }
+
+
+        if (foreign !== null) {
+
+            document.getElementById(
+                "foreign"
+            ).value = foreign;
+        }
+
+
+        if (data) {
+
+            document.getElementById(
+                "input"
+            ).value = data;
+
+
+            sessionStorage.removeItem(
+                "morseAlphabet"
+            );
+
+            sessionStorage.removeItem(
+                "morseForeign"
+            );
+
+            sessionStorage.removeItem(
+                "morseData"
+            );
+
+
+            decodeText();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
