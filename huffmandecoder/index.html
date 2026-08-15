@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EncoderGuru - Huffman Decoder</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #172033;
+}
+
+header {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 5px rgba(0,0,0,.04);
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #172033;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.brand {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.brand span {
+    color: #6B7278;
+}
+
+.banner {
+    width: 100%;
+    height: 220px;
+
+    background:
+        linear-gradient(
+            rgba(191, 201, 255, .13),
+            rgba(109, 108, 145, .36)
+        ),
+        url("https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encodergurubanner.png.png");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: white;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+.banner p {
+    margin: 10px 0 0;
+    font-size: 17px;
+}
+
+main {
+    max-width: 900px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.editor-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #64748b;
+    margin: 0 0 22px;
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 210px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #172033;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    outline: none;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+#outputContainer {
+    display: none;
+    margin-top: 25px;
+}
+
+.output-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+#output {
+    min-height: 160px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background .2s, transform .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.encode {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.encode:hover {
+    background: #bfdbfe;
+}
+
+.decode {
+    background: #2563eb;
+    color: white;
+}
+
+.decode:hover {
+    background: #1d4ed8;
+}
+
+.clear {
+    background: #eef2f7;
+    color: #475569;
+}
+
+.clear:hover {
+    background: #e2e8f0;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 17px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .banner {
+        height: 185px;
+    }
+
+    .banner h1 {
+        font-size: 32px;
+    }
+
+    .banner p {
+        font-size: 15px;
+    }
+
+    main {
+        margin-top: 30px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <a
+        class="header-link"
+        href="https://encoderguru.github.io"
+    >
+
+        <img
+            class="logo"
+            src="https://raw.githubusercontent.com/danieltorres-mhcs/assets/refs/heads/main/encoderguru.png"
+            alt="EncoderGuru"
+        >
+
+        <div class="brand">
+            Encoder<span>Guru</span>
+        </div>
+
+    </a>
+
+</header>
+
+
+<section class="banner">
+
+    <div>
+
+        <h1>Huffman Decoder</h1>
+
+        <p>
+            Huffman Code is a type of code where you use Binary to represent letters without ambiguity.
+        </p>
+
+    </div>
+
+</section>
+
+
+<main>
+
+    <div class="editor-title">
+        Enter your Huffman code
+    </div>
+
+    <p class="description">
+        Type or paste the binary Huffman code you want to decode.
+    </p>
+
+
+    <textarea
+        id="input"
+        placeholder="Enter binary code..."
+    ></textarea>
+
+
+    <div id="outputContainer">
+
+        <div class="output-title">
+            Decoded output
+        </div>
+
+        <textarea
+            id="output"
+            readonly
+        ></textarea>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="decode"
+            onclick="decodeText()"
+        >
+            Decode
+        </button>
+
+        <button
+            class="encode"
+            onclick="openEncoder()"
+        >
+            Encode
+        </button>
+
+        <button
+            class="clear"
+            onclick="clearText()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 EncoderGuru
+</footer>
+
+
+<script>
+
+/*
+now we have a treee
+*/
+
+const frequencies = {
+
+    " ": 18000,
+
+    "E": 12702,
+    "T": 9056,
+    "A": 8167,
+    "O": 7507,
+    "I": 6966,
+    "N": 6749,
+    "S": 6327,
+    "H": 6094,
+    "R": 5987,
+    "D": 4253,
+    "L": 4025,
+    "C": 2782,
+    "U": 2758,
+    "M": 2406,
+    "W": 2360,
+    "F": 2228,
+    "G": 2015,
+    "Y": 1974,
+    "P": 1929,
+    "B": 1492,
+    "V": 978,
+    "K": 772,
+    "J": 153,
+    "X": 150,
+    "Q": 95,
+    "Z": 74,
+
+    "0": 500,
+    "1": 500,
+    "2": 500,
+    "3": 500,
+    "4": 500,
+    "5": 500,
+    "6": 500,
+    "7": 500,
+    "8": 500,
+    "9": 500,
+
+    ".": 800,
+    ",": 600,
+    "?": 150,
+    "!": 100,
+    "'": 200,
+    "\"": 250,
+
+    "<": 30,
+    ">": 30,
+    "/": 150,
+    "\\": 30,
+    "-": 250,
+    "_": 80,
+    "(": 100,
+    ")": 100,
+
+    "$": 80,
+    "[": 30,
+    "]": 30,
+    "{": 20,
+    "}": 20,
+    "#": 30,
+    "%": 40,
+    "^": 10,
+    "+": 50,
+    "=": 60,
+    "*": 40
+};
+
+
+/*
+get a tree
+*/
+
+function buildHuffmanTree() {
+
+    let nodes = Object.entries(frequencies).map(
+        ([char, frequency]) => ({
+            char,
+            frequency,
+            left: null,
+            right: null
+        })
+    );
+
+    while (nodes.length > 1) {
+
+        nodes.sort((a, b) =>
+            a.frequency - b.frequency
+        );
+
+        const left = nodes.shift();
+        const right = nodes.shift();
+
+        nodes.push({
+            char: null,
+            frequency:
+                left.frequency +
+                right.frequency,
+            left,
+            right
+        });
+    }
+
+    return nodes[0];
+}
+
+
+/*
+make it!
+*/
+
+function generateCodes(
+    node,
+    prefix = "",
+    table = {}
+) {
+
+    if (!node) {
+        return table;
+    }
+
+    if (node.char !== null) {
+
+        table[node.char] =
+            prefix || "0";
+
+        return table;
+    }
+
+    generateCodes(
+        node.left,
+        prefix + "0",
+        table
+    );
+
+    generateCodes(
+        node.right,
+        prefix + "1",
+        table
+    );
+
+    return table;
+}
+
+
+const huffmanTree =
+    buildHuffmanTree();
+
+const huffmanCodes =
+    generateCodes(huffmanTree);
+
+
+/*
+reverse lookup
+*/
+
+const reverseCodes = {};
+
+for (const character in huffmanCodes) {
+
+    const code =
+        huffmanCodes[character];
+
+    reverseCodes[code] =
+        character;
+}
+
+
+/*
+decode
+*/
+
+function decodeText() {
+
+    const input =
+        document.getElementById("input")
+            .value
+            .replace(/\s/g, "");
+
+    if (!input) {
+        return;
+    }
+
+
+    /*
+    Make sure only 0 and 1 are entered
+    */
+
+    if (!/^[01]+$/.test(input)) {
+
+        alert(
+            "Huffman code can only contain 0 and 1."
+        );
+
+        return;
+    }
+
+
+    let buffer = "";
+    let decoded = "";
+
+
+    /*
+    Read the binary one bit at a time
+    */
+
+    for (const bit of input) {
+
+        buffer += bit;
+
+
+        /*
+        If the current bits match a character,
+        output that character and reset.
+        */
+
+        if (reverseCodes[buffer]) {
+
+            decoded +=
+                reverseCodes[buffer];
+
+            buffer = "";
+        }
+    }
+
+
+    /*
+    If there are leftover bits the binary
+    ended in the middle of a Huffman code
+    */
+
+    if (buffer !== "") {
+
+        alert(
+            "Invalid or incomplete Huffman code."
+        );
+
+        return;
+    }
+
+
+    document.getElementById("output").value =
+        decoded;
+
+    document.getElementById("outputContainer")
+        .style.display = "block";
+}
+
+
+/*
+get to encoder
+*/
+
+function openEncoder() {
+
+    window.location.href =
+        "/huffmanencoder";
+}
+
+
+/*
+clear!
+*/
+
+function clearText() {
+
+    document.getElementById("input").value = "";
+
+    document.getElementById("output").value = "";
+
+    document.getElementById("outputContainer")
+        .style.display = "none";
+}
+
+
+/*
+data from the enfoder
+*/
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const savedData =
+            sessionStorage.getItem(
+                "huffmanData"
+            );
+
+        if (savedData) {
+
+            document.getElementById(
+                "input"
+            ).value = savedData;
+
+            sessionStorage.removeItem(
+                "huffmanData"
+            );
+
+            decodeText();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
